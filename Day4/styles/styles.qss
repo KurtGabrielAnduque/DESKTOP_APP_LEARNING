@@ -1,0 +1,109 @@
+/* 1. Base Window & Global Font */
+QMainWindow, QWidget {
+    background-color: #0f172a;
+    color: #f8fafc;
+    font-family: "Segoe UI";
+    font-size: 14px;
+}
+
+/* 2. Card Container (#card) */
+QFrame#card {
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 16px;
+}
+
+/* 3. Labels (#titleLabel, #subtitleLabel) */
+QLabel {
+    background-color: transparent;
+}
+
+QLabel#titleLabel {
+    font-size: 18px;
+    font-weight: bold;
+    color: #ffffff;
+}
+
+QLabel#subtitleLabel {
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+/* 4. Line Edit & Focus State */
+QLineEdit {
+    background-color: #0f172a;
+    border: 1px solid #475569;
+    border-radius: 6px;
+    padding: 8px 12px;
+    color: #f8fafc;
+}
+
+QLineEdit:focus {
+    border: 2px solid #3b82f6;
+}
+
+/* 5. CheckBox Sub-Control (::indicator) */
+QCheckBox {
+    spacing: 8px;
+    color: #e2e8f0;
+}
+
+QCheckBox::indicator {
+    width: 18px;
+    height: 18px;
+    border: 1px solid #64748b;
+    border-radius: 4px;
+    background-color: #0f172a;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+/* 6. Dynamic Property Banner ([status="ok"] / [status="warning"]) */
+QFrame#statusBanner[status="ok"] {
+    background-color: #052e16;
+    border: 1px solid #22c55e;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+QFrame#statusBanner[status="warning"] {
+    background-color: #451a03;
+    border: 1px solid #f59e0b;
+    border-radius: 6px;
+    padding: 8px;
+}
+
+/* 7. Buttons & Pseudo-States */
+QPushButton {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 600;
+}
+
+QPushButton:hover {
+    background-color: #1d4ed8;
+}
+
+QPushButton:pressed {
+    background-color: #1e40af;
+}
+
+QPushButton:disabled {
+    background-color: #334155;
+    color: #64748b;
+}
+
+QPushButton#dangerBtn {
+    background-color: #dc2626;
+}
+
+QPushButton#dangerBtn:hover {
+    background-color: #b91c1c;
+}

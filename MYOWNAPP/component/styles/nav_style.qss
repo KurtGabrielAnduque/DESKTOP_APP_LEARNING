@@ -1,0 +1,53 @@
+#DashBoardContainer {
+    border-right: 1px solid;
+    background-color: #151a2d; 
+}
+
+
+#MainLabel {
+    background-color: transparent;
+    color: #f8fafc;
+    font-family: "Segoe UI";
+    font-size: 18px;
+    font-weight: 700;
+    padding: 10px 20px;
+    qproperty-alignment: AlignCenter;
+    border: none;
+    margin: 8px 20px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid white;
+}
+
+QPushButton{
+    margin: 5px 8px;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #151a2d;
+    color:#ffffff;
+}
+
+QPushButton#SettingsButton {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: rgba(255, 255, 255, 50);
+}
+
+QPushButton#SettingsButton:checked {
+    background-color: #ffffff;
+    color: #151a2d;
+}
+
+QPushButton:checked {
+    background-color: #ffffff;
+    color: #151a2d;
+}
+
+QFrame#SettingsSeparator {
+    background-color: rgba(255, 255, 255, 80);
+    border: none;
+    margin: 10px 10px;
+    max-height: 1px;
+}

@@ -1,104 +1,108 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QLabel, QWidget, QVBoxLayout, QGridLayout, QHBoxLayout
-# other compotnents for widgets
-from PySide6.QtWidgets import QPushButton, QLineEdit, QTextEdit, QSlider, QProgressBar, QComboBox, QRadioButton, QListWidget
-from PySide6.QtCore import Qt
+from pathlib import Path
+import sys
+from PySide6.QtCore import QFileSystemWatcher, Qt, Slot
+from PySide6.QtWidgets import (
+    QApplication,
+    QCheckBox,
+    QFrame,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMainWindow,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
+)
 
 
-class MainWindow(QMainWindow):
+
+class QSSPlayground(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.setWindowTitle("QSS Styling Sandbox")
+        self.resize(520, 400)
 
-        # create a window title
-        # similiar to page title in web desing
-        self.setWindowTitle('Hellow World Application')
+        root = QWidget()
+        self.setCentralWidget(root)
+        root_layout = QVBoxLayout(root)
+        root_layout.setContentsMargins(24, 24, 24, 24)
 
-        # QWidget works like a div in HTML
-        # However if we want to create multiple div
-        # there must be a parent div
-        parent_container = QWidget()
-        self.setCentralWidget(parent_container)
+        # 1. Card Container (QFrame supports QSS background & borders out of the box)
+        card = QFrame()
+        card.setObjectName("card")
+        card_layout = QVBoxLayout(card)
+        card_layout.setSpacing(12)
 
-        # vertically stack every sub container
-        main_layout = QVBoxLayout(parent_container)
+        # 2. Typography Labels (#titleLabel, #subtitleLabel)
+        title = QLabel("Water Sample Calibration")
+        title.setObjectName("titleLabel")
 
-        # now create a sub container Container1
-        container1 = QWidget()
-        cont1_layout = QHBoxLayout(container1)
-        labels = ['ONE','TWO','THREE','FOUR']
-        for text in labels:
-            label = QLabel(text)
-            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            cont1_layout.addWidget(label)
+        subtitle = QLabel("Edit styles/style.qss and press Ctrl+S to see changes live.")
+        subtitle.setObjectName("subtitleLabel")
 
-        # add pushbutton for container1
-        button1 = QPushButton('Click me')
-        cont1_layout.addWidget(button1)
+        # 3. Text Input (:focus pseudo-state)
+        self.sample_input = QLineEdit()
+        self.sample_input.setPlaceholderText("Enter Sample ID (e.g. SMPL-001)")
 
-        button2 = QPushButton('Click me')
-        cont1_layout.addWidget(button2)
+        # 4. Checkbox (::indicator sub-control)
+        self.confirm_check = QCheckBox("Chamber lid locked and sensor submerged")
 
-# ===========================================================================
+        # 5. Dynamic Property Banner ([status="ok"] vs [status="warning"])
+        self.status_banner = QFrame()
+        self.status_banner.setObjectName("statusBanner")
+        self.status_banner.setProperty("status", "ok")
+        banner_layout = QHBoxLayout(self.status_banner)
+        self.status_text = QLabel("Status: OK — Ready for measurement")
+        banner_layout.addWidget(self.status_text)
 
-        # CONTAINER2
-        container2 = QWidget()
-        cont2_layout = QVBoxLayout(container2)
-        labels2= ['FIVE','SIX','SEVEN','EIGHT']
-        for text in labels2:
-            label = QLabel(text)
-            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            cont2_layout.addWidget(label)
+        # 6. Action Buttons (Default, #dangerBtn, and :disabled)
+        btn_row = QHBoxLayout()
+        self.toggle_status_btn = QPushButton("Toggle Status")
+        self.toggle_status_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.toggle_status_btn.clicked.connect(self.toggle_banner_state)
 
-        # adding line edit in container 2
-        line_edit = QLineEdit() # 1 line comment
-        text_edit = QTextEdit() # text box
+        self.reset_btn = QPushButton("Reset")
+        self.reset_btn.setObjectName("dangerBtn")
+        self.reset_btn.setCursor(Qt.CursorShape.PointingHandCursor)
 
-        listWid = QListWidget()
-        listWid.addItems(['item1','item2','item3'])
+        self.disabled_btn = QPushButton("Locked")
+        self.disabled_btn.setEnabled(False)
 
+        btn_row.addWidget(self.toggle_status_btn)
+        btn_row.addWidget(self.reset_btn)
+        btn_row.addWidget(self.disabled_btn)
 
-        cont2_layout.addWidget(line_edit)
-        cont2_layout.addWidget(text_edit)
-        cont2_layout.addWidget(listWid)
+        # Assemble Card
+        card_layout.addWidget(title)
+        card_layout.addWidget(subtitle)
+        card_layout.addWidget(self.sample_input)
+        card_layout.addWidget(self.confirm_check)
+        card_layout.addWidget(self.status_banner)
+        card_layout.addLayout(btn_row)
 
+        root_layout.addWidget(card)
+        root_layout.addStretch()
 
-# ===========================================================================
-        container3 = QWidget()
-        cont3_layout = QVBoxLayout(container3)
-        
-        # child container inside container3
-        contianer31 = QWidget()
-        cont31_layout = QHBoxLayout(contianer31)
+    @Slot()
+    def toggle_banner_state(self):
+        current = self.status_banner.property("status")
+        next_state = "warning" if current == "ok" else "ok"
 
-        labels3 = ['NINE','TEN','ELEVEN','TWELVE']
-        for text in labels3:
-            label = QLabel(text)
-            label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            cont31_layout.addWidget(label)
+        self.status_banner.setProperty("status", next_state)
+        if next_state == "ok":
+            self.status_text.setText("Status: OK — Ready for measurement")
+        else:
+            self.status_text.setText("Status: WARNING — Recalibration required")
 
-
-        # creting combo box
-        combobox = QComboBox()
-        combobox.addItems(['item1','item2','item3'])
-        
-        cont3_layout.addWidget(contianer31)
-        cont3_layout.addWidget(combobox)
-
-
-
-
-# ===========================================================================
-        # add both sub conainter in main container
-        main_layout.addWidget(container1)
-        main_layout.addWidget(container2)
-        main_layout.addWidget(container3)
+        # Required so Qt re-evaluates dynamic property selectors immediately
+        self.status_banner.style().unpolish(self.status_banner)
+        self.status_banner.style().polish(self.status_banner)
 
 
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    qss_file = Path(__file__).resolve().parent / "styles" / "style.qss"
 
-
-
-app = QApplication()
-
-window = MainWindow()
-window.show()
-
-app.exec()
+    window = QSSPlayground()
+    window.show()
+    app.exec()
